@@ -1,0 +1,15 @@
+{
+  "name": "كافتريا فيروز",
+  "short_name": "فيروز",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fcf8f2",
+  "theme_color": "#b85c38",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}
