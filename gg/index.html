@@ -264,9 +264,16 @@
         .ai-chat-footer {
             padding: 10px;
             display: flex;
+            flex-direction: column;
             gap: 6px;
             background: #fff;
             border-top: 1px solid #e8d8c8;
+        }
+
+        .ai-chat-input-row {
+            display: flex;
+            gap: 6px;
+            width: 100%;
         }
 
         .ai-chat-footer input {
@@ -578,15 +585,21 @@
 
     <div class="ai-chat-modal" id="aiChatModal">
         <div class="ai-chat-header">
-            <span>🤖 فلفولة - المساعد الذكي (ChatGPT)</span>
+            <span>🤖 فلفولة - المساعد الذكي</span>
             <button onclick="toggleAIChat()" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer;">✕</button>
         </div>
         <div class="ai-chat-body" id="aiChatBody">
             <div class="ai-msg bot">هلا بيك! أنا فلفولة مساعدك الذكي في كافتريا فيروز. تفضل، شتحب تستفسر أو تطلب؟ 😋</div>
         </div>
         <div class="ai-chat-footer">
-            <input type="text" id="aiUserInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleAiKeyPress(event)">
-            <button onclick="sendAiMessage()">إرسال</button>
+            <div style="font-size: 0.75rem; color: #8c593b; margin-bottom: 3px; display: flex; justify-content: space-between;">
+                <span>مفتاح OpenAI API:</span>
+                <span onclick="saveApiKeyPrompt()" style="cursor: pointer; text-decoration: underline;">تغيير المفتاح</span>
+            </div>
+            <div class="ai-chat-input-row">
+                <input type="text" id="aiUserInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleAiKeyPress(event)">
+                <button onclick="sendAiMessage()">إرسال</button>
+            </div>
         </div>
     </div>
 
@@ -744,27 +757,47 @@
             if (e.key === 'Enter') sendAiMessage();
         }
 
-        // دالة ربط الشات مع OpenAI (ChatGPT API)
+        function getStoredApiKey() {
+            let key = localStorage.getItem('openai_api_key');
+            if (!key) {
+                key = prompt('يرجى إدخال مفتاح OpenAI API الخاص بك (sk-...) لتشغيل المساعد الذكي فلفولة:');
+                if (key) {
+                    localStorage.setItem('openai_api_key', key.trim());
+                }
+            }
+            return localStorage.getItem('openai_api_key') || '';
+        }
+
+        function saveApiKeyPrompt() {
+            let key = prompt('أدخل مفتاح OpenAI API الجديد:', getStoredApiKey());
+            if (key) {
+                localStorage.setItem('openai_api_key', key.trim());
+                alert('تم حفظ المفتاح بنجاح! 🎉');
+            }
+        }
+
+        // دالة ربط الشات مع OpenAI بأمان تام بدون تعريض المفتاح على غيت هاب
         async function sendAiMessage() {
             const inputField = document.getElementById('aiUserInput');
             const chatBody = document.getElementById('aiChatBody');
             const text = inputField.value.trim();
             if(!text) return;
 
-            // عرض رسالة المستخدم
+            const API_KEY = getStoredApiKey();
+            if(!API_KEY) {
+                alert('الرجاء إدخال مفتاح الـ API لكي يعمل المساعد الذكي.');
+                return;
+            }
+
             chatBody.innerHTML += `<div class="ai-msg user">${text}</div>`;
             inputField.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
 
-            // رسالة جاري التفكير
             const loadingId = 'loading-' + Date.now();
             chatBody.innerHTML += `<div class="ai-msg bot" id="${loadingId}">جاري التفكير... 🤖</div>`;
             chatBody.scrollTop = chatBody.scrollHeight;
 
             try {
-                // وضع مفتاح OpenAI الخاص بك مباشرة هنا
-                const API_KEY = "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"; 
-                
                 let menuDetailsText = menuItems.map(i => `${i.name} (${i.price} د.ع)`).join(', ');
 
                 let response = await fetch(`https://api.openai.com/v1/chat/completions`, {
@@ -802,7 +835,7 @@
 
             } catch (error) {
                 document.getElementById(loadingId).remove();
-                let fallbackReply = `عذراً يا غالي، حدث خطأ بسيط بالاتصال مع الخادم (${error.message}). بس تدرك كافتريا فيروز ترحب بيك، شحب تطلب من المنيو؟ 🍔`;
+                let fallbackReply = `عذراً يا غالي، حدث خطأ بسيط أو المفتاح غير صالح (${error.message}). ترحيبات كافتريا فيروز توصلك، شتحب تطلب من المنيو؟ 🍔`;
                 chatBody.innerHTML += `<div class="ai-msg bot">${fallbackReply}</div>`;
                 chatBody.scrollTop = chatBody.scrollHeight;
             }
