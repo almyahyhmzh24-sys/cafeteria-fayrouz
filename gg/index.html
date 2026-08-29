@@ -744,95 +744,55 @@
             if (e.key === 'Enter') sendAiMessage();
         }
 
-        function sendAiMessage() {
+        // دالة الذكاء الاصطناعي الحقيقي (مثل ChatGPT / Gemini)
+        async function sendAiMessage() {
             const inputField = document.getElementById('aiUserInput');
             const chatBody = document.getElementById('aiChatBody');
             const text = inputField.value.trim();
             if(!text) return;
 
+            // عرض رسالة المستخدم
             chatBody.innerHTML += `<div class="ai-msg user">${text}</div>`;
             inputField.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
 
-            let reply = getSmartFaloulaReply(text);
-            setTimeout(() => {
+            // رسالة جاري التفكير
+            const loadingId = 'loading-' + Date.now();
+            chatBody.innerHTML += `<div class="ai-msg bot" id="${loadingId}">جاري التفكير... 🤖</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            try {
+                // استبدل ضع مفتاح الـ API هنا (يمكنك استخدام مفتاح Gemini API المجاني الخاص بك)
+                const API_KEY = "PLACE_YOUR_GEMINI_API_KEY_HERE"; 
+                
+                let menuDetailsText = menuItems.map(i => `${i.name} (${i.price} د.ع)`).join(', ');
+
+                let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `أنت مساعد ذكي اسمه "فلفولة" تعمل في "كافتريا فيروز". تجيب الزبائن باللهجة العراقية الودودة واللطيفة. يمكنك الإجابة على أي سؤال يطرحه الزبون بحرية تامة وبأسلوب ذكي ومبدع مثل ChatGPT. قائمة أصنافنا الحالية وأسعارها هي: [${menuDetailsText}]. رسالة الزبون هي: "${text}"`
+                            }]
+                        }]
+                    })
+                });
+
+                let data = await response.json();
+                let reply = data.candidates[0].content.parts[0].text;
+
+                document.getElementById(loadingId).remove();
                 chatBody.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
                 chatBody.scrollTop = chatBody.scrollHeight;
-            }, 300);
-        }
 
-        // دالة الرد المتطورة التي تجيب على أي شيء يكتبه المستخدم بطريقة متفاعلة
-        function getSmartFaloulaReply(query) {
-            let q = query.toLowerCase();
-
-            if (q.includes('هلا') || q.includes('سلام') || q.includes('صباح') || q.includes('مساء') || q.includes('هلو') || q.includes('مرحبا')) {
-                return "هلا بيك زود يا غالي! منور كافتريا فيروز، شطلب اليوم؟ 😋";
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                // نظام احتياطي محلي في حال لم يضع المستخدم مفتاح الـ API ليظل الشات يعمل بسلاسة
+                let fallbackReply = `يا هلا بيك يا حمزة! وصلتني رسالتك "${text}". منور كافتريا فيروز، تگدر تطلب أي شي أو تستفسر عن الوجبات وتدلل! 🍔☕`;
+                chatBody.innerHTML += `<div class="ai-msg bot">${fallbackReply}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
             }
-
-            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة') || q.includes('منيو') || q.includes('اسعار') || q.includes('أكل')) {
-                let text = "تفضل أبرز أصنافنا المتوفرة:\n";
-                menuItems.forEach(i => { text += `▪️ ${i.name}: ${i.price} د.ع\n`; });
-                return text;
-            }
-
-            if (q.includes('صاج فلافل') || (q.includes('صاج') && q.includes('فلافل'))) {
-                modifyQty('صاج فلافل', 1000, 1);
-                return "عيوني! أضفت لك [صاج فلافل] للسلة بقيمة 1000 د.ع 😋";
-            }
-
-            if (q.includes('صاج دجاج') || (q.includes('صاج') && q.includes('دجاج'))) {
-                modifyQty('صاج دجاج', 1500, 1);
-                return "تدلل، أضفت [صاج دجاج] زاكي للسلة بقيمة 1500 د.ع 🌯";
-            }
-
-            if (q.includes('صاج')) {
-                modifyQty('صاج دجاج', 1500, 1);
-                return "حلو! أضفت لك [صاج دجاج] للسلة بقيمة 1500 د.ع (إذا تردده فلافل گلي) 🌯";
-            }
-
-            if (q.includes('بركر') || q.includes('برغر')) {
-                modifyQty('بركر', 1500, 1);
-                return "تدلل، أضفت [بركر] زاكي للسلة بقيمة 1500 د.ع 🍔";
-            }
-
-            if (q.includes('گص') || q.includes('قص')) {
-                modifyQty('گص', 1000, 1);
-                return "عاشت الأسامي! أضفت [گص] لذيذ للسلة بقيمة 1000 د.ع 🥩";
-            }
-
-            if (q.includes('فلافل')) {
-                modifyQty('فلافل', 500, 1);
-                return "أضفت لك لفة [فلافل] مقرمشة للسلة بقيمة 500 د.ع 🧆";
-            }
-
-            if (q.includes('جاي') || q.includes('شاي')) {
-                modifyQty('جاي (حجم كبير)', 500, 1);
-                return "أضفت لك [جاي كبير] معدل للسلة بقيمة 500 د.ع ☕";
-            }
-
-            if (q.includes('قهوة') || q.includes('كابتشينو') || q.includes('نسكافيه')) {
-                modifyQty('كبتشينو', 1000, 1);
-                return "أضفت لك [كابتشينو] دافئ للسلة بقيمة 1000 د.ع ☕";
-            }
-
-            if (q.includes('ببسي') || q.includes('كوكا') || q.includes('مشروب')) {
-                modifyQty('ببسي بغداد', 500, 1);
-                return "أضفت لك [ببسي بغداد] مثلج للسلة بقيمة 500 د.ع 🥤";
-            }
-
-            if (q.includes('ماي') || q.includes('ماء')) {
-                modifyQty('بطل ماي', 250, 1);
-                return "أضفت لك [بطل ماي] للسلة بقيمة 250 د.ع 💧";
-            }
-
-            // رد افتراضي ذكي ومتجدد لأي كلام آخر يكتبه المستخدم لضمان عدم تكرار جملة ثابتة مزعجة
-            const responses = [
-                `واو، كلام جميل! تدلل يا حمزة، تگدر تطلب أي وجبة ببالك أو تسألني عن المنيو والأسعار فوراً. ❤️`,
-                `من عيوني! عيّدها بغير عبارة أو اكتب اسم الوجبة (مثل بركر أو جاي) حتى أضيفها الك بالسلة مباشرة 🍔☕`,
-                `حبيبي منور كافتريا فيروز! تگدر تختار من القائمة بالاعلى أو تكتب اللي تريده وسولف وياي براحتك 😄`,
-                `وصلتني رسالتك الحلوة "${query}"! شتحب تطلب اليوم من الأكلات والسندويشات؟ 😋`
-            ];
-            return responses[Math.floor(Math.random() * responses.length)];
         }
 
         function getElementIdKey(name) { return name.replace(/\s+/g, '_').replace(/[()]/g, ''); }
