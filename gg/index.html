@@ -114,8 +114,8 @@
         /* تنسيق شخصية فلفولة المتجولة */
         #faloula-wanderer {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
+            bottom: 18px;
+            left: 14px;
             z-index: 998;
             cursor: pointer;
             display: flex;
@@ -128,30 +128,67 @@
         .faloula-bubble {
             background: #ffffff;
             border: 2px solid #b85c38;
-            padding: 10px 14px;
-            border-radius: 16px;
-            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-size: 0.78rem;
             font-weight: bold;
             color: #4a3b32;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            max-width: 170px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+            max-width: 150px;
             text-align: center;
             position: relative;
             pointer-events: none;
+            opacity: 0;
+            transform: translateY(6px);
+            animation: faloulaBubbleShow 0.4s ease-out 1s forwards, faloulaBubbleHide 0.4s ease-in 6s forwards;
+        }
+
+        @keyframes faloulaBubbleShow {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes faloulaBubbleHide {
+            to { opacity: 0; transform: translateY(6px); visibility: hidden; }
         }
 
         .faloula-body {
-            width: 65px;
-            height: 65px;
+            width: 52px;
+            height: 52px;
             background: radial-gradient(circle at 35% 35%, #e08b53 0%, #a8582b 60%, #703313 100%);
             border-radius: 50% 50% 45% 45% / 50% 50% 55% 55%;
-            box-shadow: inset -5px -5px 12px rgba(0,0,0,0.5), 0 8px 20px rgba(112, 51, 19, 0.4);
+            box-shadow: inset -4px -4px 10px rgba(0,0,0,0.5), 0 6px 16px rgba(112, 51, 19, 0.4), 0 0 0 4px rgba(184, 92, 56, 0.15);
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            animation: faloulaWalkAnim 1.2s infinite alternate ease-in-out;
+            animation: faloulaIdleAnim 2.2s infinite alternate ease-in-out;
+        }
+
+        /* طاقية شيف صغيرة فوگ راسها */
+        .faloula-body::before {
+            content: '';
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 16px;
+            background: #fffaf3;
+            border-radius: 14px 14px 4px 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* خدود حمر بسيطة */
+        .faloula-body::after {
+            content: '';
+            position: absolute;
+            bottom: 13px;
+            left: 8px;
+            width: 8px;
+            height: 5px;
+            background: rgba(224, 90, 60, 0.45);
+            border-radius: 50%;
+            box-shadow: 28px 0 0 rgba(224, 90, 60, 0.45);
         }
 
         .faloula-face {
@@ -160,18 +197,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            margin-top: -2px;
+            gap: 3px;
+            margin-top: 2px;
         }
 
         .faloula-eyes {
             display: flex;
-            gap: 10px;
+            gap: 9px;
         }
 
         .faloula-eye {
-            width: 9px;
-            height: 12px;
+            width: 7px;
+            height: 10px;
             background: #111;
             border-radius: 50%;
             position: relative;
@@ -183,23 +220,23 @@
             content: '';
             position: absolute;
             top: 2px;
-            right: 2px;
-            width: 3px;
-            height: 3px;
+            right: 1.5px;
+            width: 2.5px;
+            height: 2.5px;
             background: #fff;
             border-radius: 50%;
         }
 
         .faloula-mouth {
-            width: 14px;
-            height: 7px;
-            border-bottom: 3px solid #fff;
+            width: 12px;
+            height: 6px;
+            border-bottom: 2.5px solid #fff;
             border-radius: 0 0 10px 10px;
         }
 
-        @keyframes faloulaWalkAnim {
-            0% { transform: translateY(0) rotate(-3deg); }
-            100% { transform: translateY(-6px) rotate(3deg); }
+        @keyframes faloulaIdleAnim {
+            0% { transform: translateY(0) rotate(-2deg); }
+            100% { transform: translateY(-4px) rotate(2deg); }
         }
 
         @keyframes blinkEye {
@@ -211,10 +248,10 @@
         .ai-chat-modal {
             display: none;
             position: fixed;
-            bottom: 110px;
-            left: 20px;
-            width: 320px;
-            height: 420px;
+            bottom: 82px;
+            left: 14px;
+            width: min(320px, 92vw);
+            height: min(440px, 72vh);
             background: #ffffff;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -693,6 +730,33 @@
         </div>
     </div>
 
+    <!-- تعليمات التثبيت لأجهزة آيفون/آيباد -->
+    <div id="iosInstallModal" class="modal">
+        <div class="modal-content" style="text-align: right;">
+            <h3 style="color: #2a9d8f; margin-bottom: 15px;">📲 تثبيت التطبيق على آيفون / آيباد</h3>
+            <p style="line-height: 2; color: #4a3b32;">
+                سفاري ما يسمح بالتثبيت التلقائي، لكن تكدر تضيف الموقع كتطبيق بخطوتين بسيطة:<br>
+                1️⃣ اضغط على زر <strong>المشاركة</strong> (المربع وفوقه سهم ⬆️) بالأسفل بمتصفح سفاري.<br>
+                2️⃣ مرر لتحت واختر <strong>"إضافة إلى الشاشة الرئيسية"</strong> (Add to Home Screen) ثم اضغط <strong>إضافة</strong>.
+            </p>
+            <button onclick="closeModal('iosInstallModal')" style="margin-top: 15px; width: 100%; padding: 10px; background: #2a9d8f; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer;">فهمت 👍</button>
+        </div>
+    </div>
+
+    <!-- تعليمات التثبيت العامة (لأي متصفح آخر لم يدعم التثبيت التلقائي بعد) -->
+    <div id="genericInstallModal" class="modal">
+        <div class="modal-content" style="text-align: right;">
+            <h3 style="color: #2a9d8f; margin-bottom: 15px;">📲 تثبيت التطبيق</h3>
+            <p style="line-height: 2; color: #4a3b32;">
+                إذا ما فتح التثبيت تلقائياً، تكدر تثبت الموقع كتطبيق يدوياً:<br>
+                1️⃣ اضغط على أيقونة القائمة (⋮ أو ⋯) بأعلى المتصفح.<br>
+                2️⃣ اختر <strong>"تثبيت التطبيق"</strong> أو <strong>"إضافة إلى الشاشة الرئيسية"</strong>.<br>
+                📌 للحصول على أفضل تجربة تثبيت تلقائي، افتح الموقع بمتصفح Chrome على أندرويد.
+            </p>
+            <button onclick="closeModal('genericInstallModal')" style="margin-top: 15px; width: 100%; padding: 10px; background: #2a9d8f; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer;">فهمت 👍</button>
+        </div>
+    </div>
+
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzO1rYZh7c0Z3XuYlzY0ESUvlrQ8Qg9udJJxpuMkt2IWVrYwbft5XqcrbpOo3Y-8ZE-iQ/exec";
 
@@ -717,27 +781,61 @@
         let headerClickCount = 0;
         let currentUser = JSON.parse(localStorage.getItem('firouz_current_user') || 'null');
 
-        // كود تشغيل زر تثبيت التطبيق (PWA Install Prompt)
+        // كود تشغيل زر تثبيت التطبيق (PWA Install Prompt) - يعمل مع أي مستخدم وأي متصفح
         let deferredPrompt;
+
+        function isStandaloneMode() {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        }
+
+        function isIOSDevice() {
+            return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        function updateInstallButtonVisibility() {
+            const btn = document.getElementById('installAppBtn');
+            if (!btn) return;
+            btn.style.display = isStandaloneMode() ? 'none' : 'flex';
+        }
+
+        // إذا كان المتصفح يدعم التثبيت التلقائي (كروم/إيدج/أندرويد) نلتقط الحدث لاستخدامه لاحقاً
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('installAppBtn').style.display = 'flex';
+            updateInstallButtonVisibility();
+        });
+
+        // بعد التثبيت الفعلي نخفي الزر
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            const btn = document.getElementById('installAppBtn');
+            if (btn) btn.style.display = 'none';
         });
 
         function installApp() {
+            // الحالة 1: المتصفح يدعم التثبيت التلقائي (أندرويد كروم/إيدج/سامسونغ إنترنت...)
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        document.getElementById('installAppBtn').style.display = 'none';
-                    }
+                deferredPrompt.userChoice.then(() => {
                     deferredPrompt = null;
+                    updateInstallButtonVisibility();
                 });
-            } else {
-                alert('التطبيق مثبت مسبقاً أو أن متصفحك يثبّت التطبيقات تلقائياً من قائمة المتصفح (⋮).');
+                return;
             }
+
+            // الحالة 2: آيفون/آيباد (سفاري لا يدعم التثبيت التلقائي إطلاقاً)
+            if (isIOSDevice()) {
+                openModal('iosInstallModal');
+                return;
+            }
+
+            // الحالة 3: أي متصفح آخر (سفاري ماك، فايرفوكس، متصفح لم يطلق الحدث بعد...)
+            openModal('genericInstallModal');
         }
+
+        // نتأكد من حالة الزر عند تحميل الصفحة (مثلاً لو التطبيق مثبت مسبقاً)
+        window.addEventListener('load', updateInstallButtonVisibility);
+        updateInstallButtonVisibility();
 
         // تسجيل Service Worker لتفعيل وضع التطبيق والعمل بدون انترنت جزئياً
         if ('serviceWorker' in navigator) {
@@ -746,7 +844,7 @@
             });
         }
 
-        // دوال الشات الذكي لـ فلفولة
+        // دوال الشات الذكي لـ فلفولة (مربوطة بذكاء اصطناعي حقيقي عبر Netlify Function)
         function toggleAIChat() {
             const chatModal = document.getElementById('aiChatModal');
             chatModal.style.display = chatModal.style.display === 'flex' ? 'none' : 'flex';
@@ -756,43 +854,75 @@
             if (e.key === 'Enter') sendAiMessage();
         }
 
-        function sendAiMessage() {
+        let faloulaHistory = [];
+        let faloulaBusy = false;
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.innerText = str;
+            return div.innerHTML;
+        }
+
+        async function sendAiMessage() {
+            if (faloulaBusy) return;
             const inputField = document.getElementById('aiUserInput');
             const chatBody = document.getElementById('aiChatBody');
             const text = inputField.value.trim();
-            if(!text) return;
+            if (!text) return;
 
-            chatBody.innerHTML += `<div class="ai-msg user">${text}</div>`;
+            chatBody.innerHTML += `<div class="ai-msg user">${escapeHtml(text)}</div>`;
             inputField.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
+            faloulaHistory.push({ role: 'user', text });
 
-            let reply = getSmartFaloulaReply(text);
-            setTimeout(() => {
-                chatBody.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
+            const typingId = 'typing-' + Date.now();
+            chatBody.innerHTML += `<div class="ai-msg bot" id="${typingId}">فلفولة تكتب... ✍️</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+            faloulaBusy = true;
+
+            try {
+                const res = await fetch('/.netlify/functions/faloula-chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: text,
+                        history: faloulaHistory.slice(0, -1).slice(-10),
+                        menu: menuItems
+                    })
+                });
+                const data = await res.json();
+                const typingEl = document.getElementById(typingId);
+
+                if (!res.ok || data.error) {
+                    if (typingEl) typingEl.remove();
+                    chatBody.innerHTML += `<div class="ai-msg bot">عذراً، صار خلل بسيط وما گدرت أوصل للذكاء الاصطناعي 🙏 جرب مرة ثانية بعد شوي.</div>`;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                    faloulaBusy = false;
+                    return;
+                }
+
+                let reply = data.reply || 'ما گدرت أجاوب هسه، حاول مرة ثانية 🙏';
+
+                const addMatch = reply.match(/\[ADD_TO_CART:\s*(.+?)\]/);
+                if (addMatch) {
+                    const itemName = addMatch[1].trim();
+                    const item = menuItems.find(i => i.active && i.name.trim() === itemName);
+                    if (item) modifyQty(item.name, item.price, 1);
+                    reply = reply.replace(/\[ADD_TO_CART:\s*.+?\]/, '').trim();
+                }
+
+                faloulaHistory.push({ role: 'model', text: reply });
+
+                if (typingEl) typingEl.remove();
+                chatBody.innerHTML += `<div class="ai-msg bot">${escapeHtml(reply).replace(/\n/g, '<br>')}</div>`;
                 chatBody.scrollTop = chatBody.scrollHeight;
-            }, 300);
-        }
-
-        function getSmartFaloulaReply(query) {
-            let q = query.toLowerCase();
-            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة')) {
-                let text = "تفضل أبرز أصنافنا:\n";
-                menuItems.forEach(i => { text += `▪️ ${i.name}: ${i.price} د.ع\n`; });
-                return text;
+            } catch (err) {
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+                chatBody.innerHTML += `<div class="ai-msg bot">عذراً، ما گدرت أوصل للنت هسه 🙏 جرب مرة ثانية.</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
             }
-            if (q.includes('صاج فلافل')) {
-                modifyQty('صاج فلافل', 1000, 1);
-                return "عيوني! أضفت لك [صاج فلافل] للسلة بقيمة 1000 د.ع 😋";
-            }
-            if (q.includes('بركر')) {
-                modifyQty('بركر', 1500, 1);
-                return "تدلل، أضفت [بركر] زاكي للسلة بقيمة 1500 د.ع 🍔";
-            }
-            if (q.includes('جاي')) {
-                modifyQty('جاي (حجم كبير)', 500, 1);
-                return "أضفت لك [جاي كبير] للسلة بقيمة 500 د.ع ☕";
-            }
-            return "يا هلا بيك! منور كافتريا فيروز، تگدر تطلب أي وجبة أو تسأل عن الأسعار وتدلل! ❤️";
+            faloulaBusy = false;
         }
 
         function getElementIdKey(name) { return name.replace(/\s+/g, '_').replace(/[()]/g, ''); }
@@ -1020,6 +1150,7 @@
         }
 
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+        function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
 
         function buildOrderMessage(isMarkdown) {
             if (!currentUser) { alert('يرجى تسجيل الدخول أولاً!'); openAuthModal(); return null; }
