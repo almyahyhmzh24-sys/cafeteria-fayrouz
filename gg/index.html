@@ -619,11 +619,11 @@
     </div>
 
     <script>
-        // رابط السحابة الجديد لـ Google Sheets
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiAlxhgPqs2RMpukM2pGnA4V2x13cmxO3ABFksIQpQESG764UGM4H-ZbFPqkn-lzIqRQ/exec";
+        // تم تحديث رابط السحابة الجديد لـ Google Sheets بنجاح
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzO1rYZh7c0Z3XuYlzY0ESUvlrQ8Qg9udJJxpuMkt2IWVrYwbft5XqcrbpOo3Y-8ZE-iQ/exec";
 
         let menuItems = [
-            { name: 'بركر', price: 1500, category: الف عافية, active: true },
+            { name: 'بركر', price: 1500, category: 'الأكلات والسندويشات', active: true },
             { name: 'صاج دجاج', price: 1500, category: 'الأكلات والسندويشات', active: true },
             { name: 'صاج فلافل', price: 1000, category: 'الأكلات والسندويشات', active: true },
             { name: 'گص', price: 1000, category: 'الأكلات والسندويشات', active: true },
@@ -860,7 +860,6 @@
             headerCartTotal.innerText = total.toLocaleString();
         }
 
-        // إرسال الطلب وحفظه في Google Sheets السحابي
         function recordOrderDataToCloud(total, address) {
             if(!currentUser) return;
             
@@ -872,7 +871,6 @@
                 total: total
             };
 
-            // إرسال البيانات للجدول السحابي خلف الكواليس
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -880,7 +878,6 @@
                 body: JSON.stringify(orderPayload)
             }).catch(err => console.log('Cloud sync error:', err));
 
-            // حفظ محلي أيضاً كنسخة احتياطية
             let history = JSON.parse(localStorage.getItem('firouz_orders') || '[]');
             history.push({ 
                 name: currentUser.name, 
@@ -902,7 +899,6 @@
             localStorage.setItem('firouz_current_user', JSON.stringify(currentUser));
         }
 
-        // جلب توب الزبائن من السحابة مباشرة
         function openTopCustomers() {
             let listDiv = document.getElementById('topCustomersList');
             listDiv.innerHTML = 'جاري جلب القائمة من السحابة...';
@@ -928,7 +924,6 @@
                 }
             })
             .catch(() => {
-                // الطريقة البديلة في حال فشل الاتصال المباشر
                 let history = JSON.parse(localStorage.getItem('firouz_orders') || '[]');
                 let customerTotals = {};
                 history.forEach(o => {
