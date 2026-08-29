@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>كافتريا فيروز</title>
     
-    <!-- ربط الأيقونة وشعار الموقع -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     
-    <!-- ربط ملف الـ PWA Manifest لتفعيل خاصية التطبيق -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#b85c38">
 
@@ -92,7 +90,6 @@
             box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
         }
 
-        /* زر التنزيل المباشر للتطبيق */
         #installAppBtn {
             display: none;
             background: linear-gradient(135deg, #2a9d8f, #21867a);
@@ -111,7 +108,6 @@
             gap: 8px;
         }
 
-        /* شخصية فلفولة المتجولة */
         #faloula-wanderer {
             position: fixed;
             bottom: 30px;
@@ -207,7 +203,6 @@
             95% { transform: scaleY(0.1); }
         }
 
-        /* نافذة الشات الذكي لـ فلفولة */
         .ai-chat-modal {
             display: none;
             position: fixed;
@@ -568,7 +563,6 @@
 
     <button class="top-customers-btn" onclick="openTopCustomers()">⭐ توب الزبائن</button>
 
-    <!-- شخصية فلفولة -->
     <div id="faloula-wanderer" onclick="toggleAIChat()">
         <div class="faloula-bubble" id="faloulaBubble">اضغط هنا وسولف وياي! 🤖🍔</div>
         <div class="faloula-body">
@@ -582,7 +576,6 @@
         </div>
     </div>
 
-    <!-- نافذة الشات الذكي -->
     <div class="ai-chat-modal" id="aiChatModal">
         <div class="ai-chat-header">
             <span>🤖 فلفولة - المساعد الذكي</span>
@@ -602,7 +595,6 @@
             <h1>☕ كافتريا فيروز 🍔</h1>
         </header>
 
-        <!-- زر التنزيل المباشر للتطبيق -->
         <button id="installAppBtn" onclick="installApp()">
             📲 تنزيل وتثبيت تطبيق كافتريا فيروز على جهازك
         </button>
@@ -660,7 +652,6 @@
         </footer>
     </div>
 
-    <!-- النوافذ المنبثقة -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h3 style="color: #8c593b; margin-bottom: 15px;">🔐 تسجيل الدخول / حساب جديد</h3>
@@ -770,71 +761,60 @@
             }, 300);
         }
 
-        // دالة الرد الذكي المحدثة والمطورة لتفهم كل الكلمات باختصار
+        // دالة الرد المتطورة التي تجيب على أي شيء يكتبه المستخدم بطريقة متفاعلة
         function getSmartFaloulaReply(query) {
             let q = query.toLowerCase();
 
-            // التحية والتفاعل العام
-            if (q.includes('هلا') || q.includes('سلام') || q.includes('صباح') || q.includes('مساء') || q.includes('هلو') || q.includes('واو') || q.includes('مرحبا')) {
+            if (q.includes('هلا') || q.includes('سلام') || q.includes('صباح') || q.includes('مساء') || q.includes('هلو') || q.includes('مرحبا')) {
                 return "هلا بيك زود يا غالي! منور كافتريا فيروز، شطلب اليوم؟ 😋";
             }
 
-            // الاستفسار عن الأسعار أو القائمة
             if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة') || q.includes('منيو') || q.includes('اسعار') || q.includes('أكل')) {
                 let text = "تفضل أبرز أصنافنا المتوفرة:\n";
                 menuItems.forEach(i => { text += `▪️ ${i.name}: ${i.price} د.ع\n`; });
                 return text;
             }
 
-            // طلب صاج فلافل
             if (q.includes('صاج فلافل') || (q.includes('صاج') && q.includes('فلافل'))) {
                 modifyQty('صاج فلافل', 1000, 1);
                 return "عيوني! أضفت لك [صاج فلافل] للسلة بقيمة 1000 د.ع 😋";
             }
 
-            // طلب صاج دجاج
             if (q.includes('صاج دجاج') || (q.includes('صاج') && q.includes('دجاج'))) {
                 modifyQty('صاج دجاج', 1500, 1);
                 return "تدلل، أضفت [صاج دجاج] زاكي للسلة بقيمة 1500 د.ع 🌯";
             }
 
-            // كلمة صاج وحدها (افتراضي صاج دجاج أو فلافل، نضع صاج فلافل مثلاً أو نسأله)
             if (q.includes('صاج')) {
                 modifyQty('صاج دجاج', 1500, 1);
                 return "حلو! أضفت لك [صاج دجاج] للسلة بقيمة 1500 د.ع (إذا تردده فلافل گلي) 🌯";
             }
 
-            // طلب بركر
             if (q.includes('بركر') || q.includes('برغر')) {
                 modifyQty('بركر', 1500, 1);
                 return "تدلل، أضفت [بركر] زاكي للسلة بقيمة 1500 د.ع 🍔";
             }
 
-            // طلب گص
             if (q.includes('گص') || q.includes('قص')) {
                 modifyQty('گص', 1000, 1);
                 return "عاشت الأسامي! أضفت [گص] لذيذ للسلة بقيمة 1000 د.ع 🥩";
             }
 
-            // طلب فلافل
             if (q.includes('فلافل')) {
                 modifyQty('فلافل', 500, 1);
                 return "أضفت لك لفة [فلافل] مقرمشة للسلة بقيمة 500 د.ع 🧆";
             }
 
-            // طلب جاي
             if (q.includes('جاي') || q.includes('شاي')) {
                 modifyQty('جاي (حجم كبير)', 500, 1);
                 return "أضفت لك [جاي كبير] معدل للسلة بقيمة 500 د.ع ☕";
             }
 
-            // طلب قهوة / كابتشينو / نسكافيه
             if (q.includes('قهوة') || q.includes('كابتشينو') || q.includes('نسكافيه')) {
                 modifyQty('كبتشينو', 1000, 1);
                 return "أضفت لك [كابتشينو] دافئ للسلة بقيمة 1000 د.ع ☕";
             }
 
-            // طلب مشروبات باردة
             if (q.includes('ببسي') || q.includes('كوكا') || q.includes('مشروب')) {
                 modifyQty('ببسي بغداد', 500, 1);
                 return "أضفت لك [ببسي بغداد] مثلج للسلة بقيمة 500 د.ع 🥤";
@@ -845,7 +825,14 @@
                 return "أضفت لك [بطل ماي] للسلة بقيمة 250 د.ع 💧";
             }
 
-            return `وصلتني رسالتك: "${query}". منور كافتريا فيروز! تگدر تطلب أي وجبة مباشرة بكتابة اسمها (مثل: بركر، صاج، جاي) وتدلل! ❤️`;
+            // رد افتراضي ذكي ومتجدد لأي كلام آخر يكتبه المستخدم لضمان عدم تكرار جملة ثابتة مزعجة
+            const responses = [
+                `واو، كلام جميل! تدلل يا حمزة، تگدر تطلب أي وجبة ببالك أو تسألني عن المنيو والأسعار فوراً. ❤️`,
+                `من عيوني! عيّدها بغير عبارة أو اكتب اسم الوجبة (مثل بركر أو جاي) حتى أضيفها الك بالسلة مباشرة 🍔☕`,
+                `حبيبي منور كافتريا فيروز! تگدر تختار من القائمة بالاعلى أو تكتب اللي تريده وسولف وياي براحتك 😄`,
+                `وصلتني رسالتك الحلوة "${query}"! شتحب تطلب اليوم من الأكلات والسندويشات؟ 😋`
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
         }
 
         function getElementIdKey(name) { return name.replace(/\s+/g, '_').replace(/[()]/g, ''); }
