@@ -92,7 +92,7 @@
             box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
         }
 
-        /* زر التنزيل المباشر للتطبيق (يظهر بذكاء) */
+        /* زر التنزيل المباشر للتطبيق */
         #installAppBtn {
             display: none;
             background: linear-gradient(135deg, #2a9d8f, #21867a);
@@ -111,7 +111,7 @@
             gap: 8px;
         }
 
-        /* تنسيق شخصية فلفولة المتجولة */
+        /* شخصية فلفولة المتجولة */
         #faloula-wanderer {
             position: fixed;
             bottom: 30px;
@@ -717,7 +717,6 @@
         let headerClickCount = 0;
         let currentUser = JSON.parse(localStorage.getItem('firouz_current_user') || 'null');
 
-        // كود تشغيل زر تثبيت التطبيق (PWA Install Prompt)
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -739,14 +738,12 @@
             }
         }
 
-        // تسجيل Service Worker لتفعيل وضع التطبيق والعمل بدون انترنت جزئياً
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
             });
         }
 
-        // دوال الشات الذكي لـ فلفولة
         function toggleAIChat() {
             const chatModal = document.getElementById('aiChatModal');
             chatModal.style.display = chatModal.style.display === 'flex' ? 'none' : 'flex';
@@ -773,26 +770,82 @@
             }, 300);
         }
 
+        // دالة الرد الذكي المحدثة والمطورة لتفهم كل الكلمات باختصار
         function getSmartFaloulaReply(query) {
             let q = query.toLowerCase();
-            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة')) {
-                let text = "تفضل أبرز أصنافنا:\n";
+
+            // التحية والتفاعل العام
+            if (q.includes('هلا') || q.includes('سلام') || q.includes('صباح') || q.includes('مساء') || q.includes('هلو') || q.includes('واو') || q.includes('مرحبا')) {
+                return "هلا بيك زود يا غالي! منور كافتريا فيروز، شطلب اليوم؟ 😋";
+            }
+
+            // الاستفسار عن الأسعار أو القائمة
+            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة') || q.includes('منيو') || q.includes('اسعار') || q.includes('أكل')) {
+                let text = "تفضل أبرز أصنافنا المتوفرة:\n";
                 menuItems.forEach(i => { text += `▪️ ${i.name}: ${i.price} د.ع\n`; });
                 return text;
             }
-            if (q.includes('صاج فلافل')) {
+
+            // طلب صاج فلافل
+            if (q.includes('صاج فلافل') || (q.includes('صاج') && q.includes('فلافل'))) {
                 modifyQty('صاج فلافل', 1000, 1);
                 return "عيوني! أضفت لك [صاج فلافل] للسلة بقيمة 1000 د.ع 😋";
             }
-            if (q.includes('بركر')) {
+
+            // طلب صاج دجاج
+            if (q.includes('صاج دجاج') || (q.includes('صاج') && q.includes('دجاج'))) {
+                modifyQty('صاج دجاج', 1500, 1);
+                return "تدلل، أضفت [صاج دجاج] زاكي للسلة بقيمة 1500 د.ع 🌯";
+            }
+
+            // كلمة صاج وحدها (افتراضي صاج دجاج أو فلافل، نضع صاج فلافل مثلاً أو نسأله)
+            if (q.includes('صاج')) {
+                modifyQty('صاج دجاج', 1500, 1);
+                return "حلو! أضفت لك [صاج دجاج] للسلة بقيمة 1500 د.ع (إذا تردده فلافل گلي) 🌯";
+            }
+
+            // طلب بركر
+            if (q.includes('بركر') || q.includes('برغر')) {
                 modifyQty('بركر', 1500, 1);
                 return "تدلل، أضفت [بركر] زاكي للسلة بقيمة 1500 د.ع 🍔";
             }
-            if (q.includes('جاي')) {
-                modifyQty('جاي (حجم كبير)', 500, 1);
-                return "أضفت لك [جاي كبير] للسلة بقيمة 500 د.ع ☕";
+
+            // طلب گص
+            if (q.includes('گص') || q.includes('قص')) {
+                modifyQty('گص', 1000, 1);
+                return "عاشت الأسامي! أضفت [گص] لذيذ للسلة بقيمة 1000 د.ع 🥩";
             }
-            return "يا هلا بيك! منور كافتريا فيروز، تگدر تطلب أي وجبة أو تسأل عن الأسعار وتدلل! ❤️";
+
+            // طلب فلافل
+            if (q.includes('فلافل')) {
+                modifyQty('فلافل', 500, 1);
+                return "أضفت لك لفة [فلافل] مقرمشة للسلة بقيمة 500 د.ع 🧆";
+            }
+
+            // طلب جاي
+            if (q.includes('جاي') || q.includes('شاي')) {
+                modifyQty('جاي (حجم كبير)', 500, 1);
+                return "أضفت لك [جاي كبير] معدل للسلة بقيمة 500 د.ع ☕";
+            }
+
+            // طلب قهوة / كابتشينو / نسكافيه
+            if (q.includes('قهوة') || q.includes('كابتشينو') || q.includes('نسكافيه')) {
+                modifyQty('كبتشينو', 1000, 1);
+                return "أضفت لك [كابتشينو] دافئ للسلة بقيمة 1000 د.ع ☕";
+            }
+
+            // طلب مشروبات باردة
+            if (q.includes('ببسي') || q.includes('كوكا') || q.includes('مشروب')) {
+                modifyQty('ببسي بغداد', 500, 1);
+                return "أضفت لك [ببسي بغداد] مثلج للسلة بقيمة 500 د.ع 🥤";
+            }
+
+            if (q.includes('ماي') || q.includes('ماء')) {
+                modifyQty('بطل ماي', 250, 1);
+                return "أضفت لك [بطل ماي] للسلة بقيمة 250 د.ع 💧";
+            }
+
+            return `وصلتني رسالتك: "${query}". منور كافتريا فيروز! تگدر تطلب أي وجبة مباشرة بكتابة اسمها (مثل: بركر، صاج، جاي) وتدلل! ❤️`;
         }
 
         function getElementIdKey(name) { return name.replace(/\s+/g, '_').replace(/[()]/g, ''); }
