@@ -570,7 +570,7 @@
 
     <!-- شخصية فلفولة -->
     <div id="faloula-wanderer" onclick="toggleAIChat()">
-        <div class="faloula-bubble" id="faloulaBubble">هلافيك! اطلب شي يعجبك 🤖🍔</div>
+        <div class="faloula-bubble" id="faloulaBubble">اضغط هنا وسولف وياي! 🤖🍔</div>
         <div class="faloula-body">
             <div class="faloula-face">
                 <div class="faloula-eyes">
@@ -589,7 +589,7 @@
             <button onclick="toggleAIChat()" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer;">✕</button>
         </div>
         <div class="ai-chat-body" id="aiChatBody">
-            <div class="ai-msg bot">يا هلا وغلا! أني فلفولة، خادمك الصغير بكافتريا فيروز. شتأمر اليوم؟ تگول بركر، صاج، لو چاي يطرد الصداع؟ ☕</div>
+            <div class="ai-msg bot">هلا بيك! أنا فلفولة مساعدك الذكي في كافتريا فيروز. تفضل، شتحب تستفسر أو تطلب؟ 😋</div>
         </div>
         <div class="ai-chat-footer">
             <input type="text" id="aiUserInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleAiKeyPress(event)">
@@ -717,6 +717,7 @@
         let headerClickCount = 0;
         let currentUser = JSON.parse(localStorage.getItem('firouz_current_user') || 'null');
 
+        // كود تشغيل زر تثبيت التطبيق (PWA Install Prompt)
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -738,34 +739,14 @@
             }
         }
 
+        // تسجيل Service Worker لتفعيل وضع التطبيق والعمل بدون انترنت جزئياً
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
             });
         }
 
-        const faloulaQuotes = [
-            "هلافيك! اطلب شي يعجبك 🤖🍔",
-            "الجاي عدنا يطرد الصداع ☕🔥",
-            "صاج الدجاج دمرني من الطعم! 🌯",
-            "لا تنسى تباوع على توب الزبائن ⭐",
-            "تامرني أمر، أني بخدمتك 🤎",
-            "البركر الحار يگطع الگلوب 🍔✨",
-            "عطشان؟ طلب لك ببسي بارد 🥤"
-        ];
-
-        function wanderFaloula() {
-            const wanderer = document.getElementById('faloula-wanderer');
-            const bubble = document.getElementById('faloulaBubble');
-            if (!wanderer || !bubble) return;
-            const randomX = Math.random() * (window.innerWidth - 220) + 20;
-            const randomY = Math.random() * (window.innerHeight - 250) + 20;
-            wanderer.style.left = `${randomX}px`;
-            wanderer.style.bottom = `${randomY}px`;
-            bubble.innerText = faloulaQuotes[Math.floor(Math.random() * faloulaQuotes.length)];
-        }
-        setInterval(wanderFaloula, 10000);
-
+        // دوال الشات الذكي لـ فلفولة
         function toggleAIChat() {
             const chatModal = document.getElementById('aiChatModal');
             chatModal.style.display = chatModal.style.display === 'flex' ? 'none' : 'flex';
@@ -792,64 +773,26 @@
             }, 300);
         }
 
-        // محرك ذكي مطور ومرن للتعرف على الأصناف وإضافتها تلقائياً
         function getSmartFaloulaReply(query) {
             let q = query.toLowerCase();
-
-            // 1. طلبات الأسعار والقائمة
-            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة') || q.includes('منيو') || q.includes('اسعار') || q.includes('شكو') || q.includes('أكلات')) {
-                let text = "تدلل بعيني! هاي لستة الأصناف والأسعار گدامك:\n";
+            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة')) {
+                let text = "تفضل أبرز أصنافنا:\n";
                 menuItems.forEach(i => { text += `▪️ ${i.name}: ${i.price} د.ع\n`; });
                 return text;
             }
-
-            // 2. فحص مطابقة الأصناف بشكل دقيق من القائمة
-            let foundItem = null;
-            
-            // تحقق مخصص للكلمات الشائعة
-            if (q.includes('صاج دجاج') || (q.includes('صاج') && q.includes('دجاج'))) {
-                foundItem = menuItems.find(i => i.name === 'صاج دجاج');
-            } else if (q.includes('صاج فلافل') || (q.includes('صاج') && q.includes('فلافل'))) {
-                foundItem = menuItems.find(i => i.name === 'صاج فلافل');
-            } else if (q.includes('فلافل')) {
-                foundItem = menuItems.find(i => i.name === 'فلافل');
-            } else if (q.includes('بركر') || q.includes('برجر') || q.includes('burger')) {
-                foundItem = menuItems.find(i => i.name === 'بركر');
-            } else if (q.includes('گص') || q.includes('قص')) {
-                foundItem = menuItems.find(i => i.name === 'گص');
-            } else if (q.includes('مشكل')) {
-                foundItem = menuItems.find(i => i.name === 'مشكل');
-            } else if (q.includes('كبتشينو') || q.includes('كابتشينو')) {
-                foundItem = menuItems.find(i => i.name === 'كبتشينو');
-            } else if (q.includes('نسكافيه')) {
-                foundItem = menuItems.find(i => i.name === 'نسكافيه');
-            } else if (q.includes('جاي كبير')) {
-                foundItem = menuItems.find(i => i.name === 'جاي (حجم كبير)');
-            } else if (q.includes('جاي') || q.includes('شاي')) {
-                foundItem = menuItems.find(i => i.name === 'جاي (حجم كبير)');
-            } else if (q.includes('ببسي')) {
-                foundItem = menuItems.find(i => i.name === 'ببسي بغداد');
-            } else if (q.includes('كوكولا') || q.includes('كوكا')) {
-                foundItem = menuItems.find(i => i.name === 'كوكولا');
-            } else if (q.includes('ماي') || q.includes('ماء')) {
-                foundItem = menuItems.find(i => i.name === 'بطل ماي');
-            } else if (q.includes('لبن')) {
-                foundItem = menuItems.find(i => i.name === 'لبن');
+            if (q.includes('صاج فلافل')) {
+                modifyQty('صاج فلافل', 1000, 1);
+                return "عيوني! أضفت لك [صاج فلافل] للسلة بقيمة 1000 د.ع 😋";
             }
-
-            // إذا وجد الصناف، أضفه للسلة وارجع رد مناسب
-            if (foundItem) {
-                modifyQty(foundItem.name, foundItem.price, 1);
-                return `ابشر! أضفت لك (${foundItem.name}) للسلة بقيمة ${foundItem.price} د.ع. بالعافية مقدماً 😋✨`;
+            if (q.includes('بركر')) {
+                modifyQty('بركر', 1500, 1);
+                return "تدلل، أضفت [بركر] زاكي للسلة بقيمة 1500 د.ع 🍔";
             }
-
-            // 3. التحيات
-            if (q.includes('سلام') || q.includes('هلا') || q.includes('مرحبا') || q.includes('شلونك')) {
-                return "هلا بيك يا الغالي! منور كافتريا فيروز، شحب أضيف لك اليوم؟ (تگول بركر، صاج، جاي، ببسي...) 🤎";
+            if (q.includes('جاي')) {
+                modifyQty('جاي (حجم كبير)', 500, 1);
+                return "أضفت لك [جاي كبير] للسلة بقيمة 500 د.ع ☕";
             }
-
-            // 4. رد افتراضي
-            return "يا بعد بيتي، ما فهمت قصدك زين.. گلي باختصار شتحب اطلب لك (مثل: بركر، صاج دجاج، جاي، ماي) وأني حاضر بعيوني! 🤖";
+            return "يا هلا بيك! منور كافتريا فيروز، تگدر تطلب أي وجبة أو تسأل عن الأسعار وتدلل! ❤️";
         }
 
         function getElementIdKey(name) { return name.replace(/\s+/g, '_').replace(/[()]/g, ''); }
