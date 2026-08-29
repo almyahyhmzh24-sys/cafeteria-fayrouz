@@ -8,6 +8,10 @@
     <!-- ربط الأيقونة وشعار الموقع -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
+    
+    <!-- ربط ملف الـ PWA Manifest لتفعيل خاصية التطبيق -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#b85c38">
 
     <style>
         * {
@@ -88,7 +92,26 @@
             box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
         }
 
-        /* تنسيق شخصية فلفولة المتجولة والواقعية */
+        /* زر التنزيل المباشر للتطبيق (يظهر بذكاء) */
+        #installAppBtn {
+            display: none;
+            background: linear-gradient(135deg, #2a9d8f, #21867a);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* تنسيق شخصية فلفولة المتجولة */
         #faloula-wanderer {
             position: fixed;
             bottom: 30px;
@@ -129,20 +152,6 @@
             align-items: center;
             justify-content: center;
             animation: faloulaWalkAnim 1.2s infinite alternate ease-in-out;
-        }
-
-        .faloula-body::before {
-            content: '';
-            position: absolute;
-            inset: 4px;
-            border-radius: 50%;
-            background-image: 
-                radial-gradient(circle, #5c280e 20%, transparent 20%),
-                radial-gradient(circle, #f4a261 15%, transparent 15%);
-            background-size: 8px 8px;
-            background-position: 0 0, 4px 4px;
-            opacity: 0.35;
-            pointer-events: none;
         }
 
         .faloula-face {
@@ -196,6 +205,92 @@
         @keyframes blinkEye {
             0%, 90%, 100% { transform: scaleY(1); }
             95% { transform: scaleY(0.1); }
+        }
+
+        /* نافذة الشات الذكي لـ فلفولة */
+        .ai-chat-modal {
+            display: none;
+            position: fixed;
+            bottom: 110px;
+            left: 20px;
+            width: 320px;
+            height: 420px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid #e8d8c8;
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, #b85c38, #8c593b);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-chat-body {
+            flex-grow: 1;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #fdfaf6;
+            font-size: 0.9rem;
+        }
+
+        .ai-msg {
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .ai-msg.bot {
+            background: #f0e6dc;
+            color: #4a3b32;
+            align-self: flex-start;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-msg.user {
+            background: #8c593b;
+            color: white;
+            align-self: flex-end;
+            border-bottom-left-radius: 2px;
+        }
+
+        .ai-chat-footer {
+            padding: 10px;
+            display: flex;
+            gap: 6px;
+            background: #fff;
+            border-top: 1px solid #e8d8c8;
+        }
+
+        .ai-chat-footer input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid #dcd0c4;
+            border-radius: 12px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .ai-chat-footer button {
+            background: #8c593b;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .working-hours-box {
@@ -284,10 +379,6 @@
             font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
-        }
-
-        .initial-add-btn:hover {
-            background-color: #b85c38;
         }
 
         .quantity-counter {
@@ -400,12 +491,6 @@
             outline: none;
         }
 
-        .input-group input:focus, .input-group textarea:focus {
-            border-color: #b85c38;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(184, 92, 56, 0.15);
-        }
-
         .submit-btn {
             background: linear-gradient(135deg, #b85c38, #8c593b);
             color: white;
@@ -432,24 +517,6 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-
-        .install-guide-box {
-            background: #f0e6dc;
-            border-radius: 16px;
-            padding: 15px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        .install-btn {
-            background: #4a3b32;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
         }
 
         .modal {
@@ -491,9 +558,6 @@
             text-decoration: none;
             margin-top: 4px;
         }
-        .instagram-credits:hover {
-            opacity: 0.8;
-        }
     </style>
 </head>
 <body>
@@ -504,9 +568,9 @@
 
     <button class="top-customers-btn" onclick="openTopCustomers()">⭐ توب الزبائن</button>
 
-    <!-- شخصية فلفولة المتجولة الواقعية والتفاعلية -->
-    <div id="faloula-wanderer" onclick="faloulaInteract()">
-        <div class="faloula-bubble" id="faloulaBubble">هلا بيك! جرب صاج الفلافل المقرمش 😋</div>
+    <!-- شخصية فلفولة -->
+    <div id="faloula-wanderer" onclick="toggleAIChat()">
+        <div class="faloula-bubble" id="faloulaBubble">اضغط هنا وسولف وياي! 🤖🍔</div>
         <div class="faloula-body">
             <div class="faloula-face">
                 <div class="faloula-eyes">
@@ -518,10 +582,30 @@
         </div>
     </div>
 
+    <!-- نافذة الشات الذكي -->
+    <div class="ai-chat-modal" id="aiChatModal">
+        <div class="ai-chat-header">
+            <span>🤖 فلفولة - المساعد الذكي</span>
+            <button onclick="toggleAIChat()" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer;">✕</button>
+        </div>
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-msg bot">هلا بيك! أنا فلفولة مساعدك الذكي في كافتريا فيروز. تفضل، شتحب تستفسر أو تطلب؟ 😋</div>
+        </div>
+        <div class="ai-chat-footer">
+            <input type="text" id="aiUserInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleAiKeyPress(event)">
+            <button onclick="sendAiMessage()">إرسال</button>
+        </div>
+    </div>
+
     <div class="container">
         <header onclick="handleHeaderClick()">
             <h1>☕ كافتريا فيروز 🍔</h1>
         </header>
+
+        <!-- زر التنزيل المباشر للتطبيق -->
+        <button id="installAppBtn" onclick="installApp()">
+            📲 تنزيل وتثبيت تطبيق كافتريا فيروز على جهازك
+        </button>
 
         <div class="working-hours-box">
             🕒 <span>أوقات العمل:</span> من 7:00 صباحاً إلى 1:00 ظهراً | ومن 6:00 مساءً إلى 10:00 ليلاً
@@ -563,13 +647,7 @@
             </div>
             
             <button class="submit-btn" onclick="sendOrderTelegram()">إرسال الطلب للمطبخ (تلغرام)</button>
-            <button class="whatsapp-btn" onclick="sendOrderWhatsApp()">🟢 إرسال الطلب عبر الواتساب (طريقة احتياطية)</button>
-        </div>
-
-        <div class="install-guide-box">
-            <h3 style="color: #8c593b; margin-bottom: 5px;">📲 ثبّت موقع كافتريا فيروز على شاشتك</h3>
-            <p style="font-size: 0.85rem; color: #6b5647;">اطلب بسرعة وبدون ما تفتح المتصفح كل مرة! اضغط الزر أدناه للتثبيت.</p>
-            <button class="install-btn" onclick="alert('للتثبيت: اضغط على القائمة (⋮) في متصفحك ثم اختر [إضافة إلى الشاشة الرئيسية / Add to Home screen]')">ثبّت الموقع الآن</button>
+            <button class="whatsapp-btn" onclick="sendOrderWhatsApp()">🟢 إرسال الطلب عبر الواتساب</button>
         </div>
 
         <footer>
@@ -582,7 +660,7 @@
         </footer>
     </div>
 
-    <!-- نافذة تسجيل الدخول -->
+    <!-- النوافذ المنبثقة -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <h3 style="color: #8c593b; margin-bottom: 15px;">🔐 تسجيل الدخول / حساب جديد</h3>
@@ -599,27 +677,23 @@
         </div>
     </div>
 
-    <!-- نافذة توب الزبائن -->
     <div id="topModal" class="modal">
         <div class="modal-content">
-            <h3 style="color: #8c593b; margin-bottom: 15px;">🏆 لوحة توب الزبائن (الأكثر طلباً)</h3>
-            <div id="topCustomersList">جاري التحميل من السحابة...</div>
+            <h3 style="color: #8c593b; margin-bottom: 15px;">🏆 لوحة توب الزبائن</h3>
+            <div id="topCustomersList">جاري التحميل...</div>
             <button onclick="closeModal('topModal')" style="margin-top: 15px; width: 100%; padding: 10px; background: #8c593b; color: white; border: none; border-radius: 8px; cursor: pointer;">إغلاق</button>
         </div>
     </div>
 
-    <!-- نافذة لوحة التحكم المخفية -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <h3 style="color: #b85c38; margin-bottom: 15px;">🔐 لوحة التحكم الإدارية</h3>
-            <p style="font-size: 0.85rem; margin-bottom: 10px;">تفعيل أو تعطيل الأصناف:</p>
             <div id="adminItemsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;"></div>
             <button onclick="closeModal('adminModal')" style="width: 100%; padding: 10px; background: #4a3b32; color: white; border: none; border-radius: 8px; cursor: pointer;">إغلاق وحفظ</button>
         </div>
     </div>
 
     <script>
-        // تم تحديث رابط السحابة الجديد لـ Google Sheets بنجاح
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzO1rYZh7c0Z3XuYlzY0ESUvlrQ8Qg9udJJxpuMkt2IWVrYwbft5XqcrbpOo3Y-8ZE-iQ/exec";
 
         let menuItems = [
@@ -643,39 +717,85 @@
         let headerClickCount = 0;
         let currentUser = JSON.parse(localStorage.getItem('firouz_current_user') || 'null');
 
-        const faloulaPhrases = [
-            "هلا بيك! جرب صاج الفلافل المقرمش 😋",
-            "جاي فيروز المعدل يروي عطشك! ☕",
-            "كل طلب بيكوّن نقاط ولاء ويانا! ⭐",
-            "منورين كافتريا فيروز اليوم ❤️",
-            "شنو تحب تطلب ويانا اليوم؟ 👀",
-            "طعم الفلافل عدنا غير كل مكان 🌿"
-        ];
+        // كود تشغيل زر تثبيت التطبيق (PWA Install Prompt)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installAppBtn').style.display = 'flex';
+        });
 
-        function faloulaInteract() {
-            const bubble = document.getElementById('faloulaBubble');
-            let randomMsg = faloulaPhrases[Math.floor(Math.random() * faloulaPhrases.length)];
-            bubble.innerText = randomMsg;
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('installAppBtn').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert('التطبيق مثبت مسبقاً أو أن متصفحك يثبّت التطبيقات تلقائياً من قائمة المتصفح (⋮).');
+            }
         }
 
-        function startFaloulaWandering() {
-            const wanderer = document.getElementById('faloula-wanderer');
-            setInterval(() => {
-                let randomX = Math.random() * (window.innerWidth - 220);
-                let randomY = Math.random() * (window.innerHeight - 180);
-                if(randomX < 20) randomX = 20;
-                if(randomY < 80) randomY = 80;
-
-                wanderer.style.left = randomX + 'px';
-                wanderer.style.bottom = 'unset';
-                wanderer.style.top = randomY + 'px';
-                faloulaInteract();
-            }, 6000);
+        // تسجيل Service Worker لتفعيل وضع التطبيق والعمل بدون انترنت جزئياً
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
+            });
         }
 
-        function getElementIdKey(name) {
-            return name.replace(/\s+/g, '_').replace(/[()]/g, '');
+        // دوال الشات الذكي لـ فلفولة
+        function toggleAIChat() {
+            const chatModal = document.getElementById('aiChatModal');
+            chatModal.style.display = chatModal.style.display === 'flex' ? 'none' : 'flex';
         }
+
+        function handleAiKeyPress(e) {
+            if (e.key === 'Enter') sendAiMessage();
+        }
+
+        function sendAiMessage() {
+            const inputField = document.getElementById('aiUserInput');
+            const chatBody = document.getElementById('aiChatBody');
+            const text = inputField.value.trim();
+            if(!text) return;
+
+            chatBody.innerHTML += `<div class="ai-msg user">${text}</div>`;
+            inputField.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            let reply = getSmartFaloulaReply(text);
+            setTimeout(() => {
+                chatBody.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 300);
+        }
+
+        function getSmartFaloulaReply(query) {
+            let q = query.toLowerCase();
+            if (q.includes('سعر') || q.includes('بكم') || q.includes('قائمة')) {
+                let text = "تفضل أبرز أصنافنا:\n";
+                menuItems.forEach(i => { text += `▪️ ${i.name}: ${i.price} د.ع\n`; });
+                return text;
+            }
+            if (q.includes('صاج فلافل')) {
+                modifyQty('صاج فلافل', 1000, 1);
+                return "عيوني! أضفت لك [صاج فلافل] للسلة بقيمة 1000 د.ع 😋";
+            }
+            if (q.includes('بركر')) {
+                modifyQty('بركر', 1500, 1);
+                return "تدلل، أضفت [بركر] زاكي للسلة بقيمة 1500 د.ع 🍔";
+            }
+            if (q.includes('جاي')) {
+                modifyQty('جاي (حجم كبير)', 500, 1);
+                return "أضفت لك [جاي كبير] للسلة بقيمة 500 د.ع ☕";
+            }
+            return "يا هلا بيك! منور كافتريا فيروز، تگدر تطلب أي وجبة أو تسأل عن الأسعار وتدلل! ❤️";
+        }
+
+        function getElementIdKey(name) { return name.replace(/\s+/g, '_').replace(/[()]/g, ''); }
 
         function checkUserSession() {
             const statusText = document.getElementById('userStatusText');
@@ -691,7 +811,7 @@
                 statusText.innerText = '👤 غير مسجل الدخول';
                 userPointsDisplay.innerText = '';
                 authBtn.innerText = 'تسجيل الدخول';
-                document.getElementById('myHistoryList').innerText = 'يرجى تسجيل الدخول برقم هاتفك لعرض سجل طلباتك ونقاطك.';
+                document.getElementById('myHistoryList').innerText = 'يرجى تسجيل الدخول برقم هاتفك لعرض سجل طلباتك.';
             }
         }
 
@@ -706,19 +826,13 @@
         function handleLogin() {
             let name = document.getElementById('authName').value.trim();
             let phone = document.getElementById('authPhone').value.trim();
-            if(!name || !phone) {
-                alert('يرجى كتابة الاسم ورقم الهاتف!');
-                return;
-            }
+            if(!name || !phone) { alert('يرجى كتابة الاسم ورقم الهاتف!'); return; }
 
             let users = JSON.parse(localStorage.getItem('firouz_users') || '{}');
-            if(!users[phone]) {
-                users[phone] = { name: name, phone: phone, points: 0 };
-            } else {
-                users[phone].name = name;
-            }
+            if(!users[phone]) users[phone] = { name: name, phone: phone, points: 0 };
+            else users[phone].name = name;
+            
             localStorage.setItem('firouz_users', JSON.stringify(users));
-
             currentUser = users[phone];
             localStorage.setItem('firouz_current_user', JSON.stringify(currentUser));
             
@@ -732,15 +846,9 @@
             let allOrders = JSON.parse(localStorage.getItem('firouz_orders') || '[]');
             let myOrders = allOrders.filter(o => o.phone === currentUser.phone);
 
-            if(myOrders.length === 0) {
-                historyList.innerHTML = 'ليس لديك أي طلبات سابقة مسجلة بهذا الحساب.';
-                return;
-            }
-
-            let html = `<ul style="padding-right: 15px; margin-top: 5px;">`;
-            myOrders.forEach(o => {
-                html += `<li style="margin-bottom: 5px;">طلب بقيمة <b>${o.total.toLocaleString()} د.ع</b> - بتاريخ ${o.date} (${o.address})</li>`;
-            });
+            if(myOrders.length === 0) { historyList.innerHTML = 'ليس لديك طلبات سابقة.'; return; }
+            let html = `<ul style="padding-right: 15px;">`;
+            myOrders.forEach(o => { html += `<li>طلب بقيمة <b>${o.total.toLocaleString()} د.ع</b> - ${o.date}</li>`; });
             html += `</ul>`;
             historyList.innerHTML = html;
         }
@@ -748,7 +856,6 @@
         function renderMenu() {
             const container = document.getElementById('menuContainer');
             container.innerHTML = '';
-            
             let categories = [...new Set(menuItems.map(i => i.category))];
             
             categories.forEach(cat => {
@@ -790,9 +897,7 @@
             }
             if (existingItem) {
                 existingItem.qty += change;
-                if (existingItem.qty <= 0) {
-                    cart = cart.filter(item => item.name !== name);
-                }
+                if (existingItem.qty <= 0) cart = cart.filter(item => item.name !== name);
             }
             updateCartUI();
         }
@@ -844,12 +949,12 @@
             let total = 0, totalQty = 0;
 
             cart.forEach(item => {
-                const itemTotal = item.price * item.qty;
+                let itemTotal = item.price * item.qty;
                 total += itemTotal;
                 totalQty += item.qty;
                 cartItemsElement.innerHTML += `
                     <li>
-                        <span>${item.name} (عدد ${item.qty}) - ${itemTotal.toLocaleString()} د.ع</span>
+                        <span>${item.name} (×${item.qty}) - ${itemTotal.toLocaleString()} د.ع</span>
                         <button class="remove-btn" onclick="removeFromCart('${item.name}')">حذف</button>
                     </li>
                 `;
@@ -862,98 +967,46 @@
 
         function recordOrderDataToCloud(total, address) {
             if(!currentUser) return;
-            
-            let orderPayload = {
-                action: 'addOrder',
-                name: currentUser.name,
-                phone: currentUser.phone,
-                address: address,
-                total: total
-            };
+            let orderPayload = { action: 'addOrder', name: currentUser.name, phone: currentUser.phone, address: address, total: total };
 
             fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
+                method: 'POST', mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderPayload)
-            }).catch(err => console.log('Cloud sync error:', err));
+            }).catch(err => console.log(err));
 
             let history = JSON.parse(localStorage.getItem('firouz_orders') || '[]');
-            history.push({ 
-                name: currentUser.name, 
-                phone: currentUser.phone, 
-                address: address, 
-                total: total, 
-                date: new Date().toLocaleDateString('ar-IQ') 
-            });
+            history.push({ name: currentUser.name, phone: currentUser.phone, address: address, total: total, date: new Date().toLocaleDateString('ar-IQ') });
             localStorage.setItem('firouz_orders', JSON.stringify(history));
 
-            let earnedPoints = Math.floor(total / 1000) * 10;
-            currentUser.points = (currentUser.points || 0) + earnedPoints;
-            
+            currentUser.points = (currentUser.points || 0) + (Math.floor(total / 1000) * 10);
             let users = JSON.parse(localStorage.getItem('firouz_users') || '{}');
-            if(users[currentUser.phone]) {
-                users[currentUser.phone].points = currentUser.points;
-                localStorage.setItem('firouz_users', JSON.stringify(users));
-            }
+            if(users[currentUser.phone]) users[currentUser.phone].points = currentUser.points;
+            localStorage.setItem('firouz_users', JSON.stringify(users));
             localStorage.setItem('firouz_current_user', JSON.stringify(currentUser));
         }
 
         function openTopCustomers() {
             let listDiv = document.getElementById('topCustomersList');
-            listDiv.innerHTML = 'جاري جلب القائمة من السحابة...';
+            listDiv.innerHTML = 'جاري التحميل...';
             document.getElementById('topModal').style.display = 'flex';
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'getTopCustomers' })
-            })
+            fetch(GOOGLE_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'getTopCustomers' }) })
             .then(res => res.json())
             .then(data => {
                 let sorted = Object.entries(data).sort((a,b) => b[1] - a[1]);
-                if (sorted.length === 0) {
-                    listDiv.innerHTML = 'لا توجد بيانات كافية حتى الآن.';
-                } else {
-                    let html = '<ol style="padding-right: 20px;">';
-                    sorted.slice(0, 5).forEach(([name, total]) => {
-                        html += `<li style="margin-bottom: 8px;"><b>${name}</b> - إجمالي المشتريات: ${Number(total).toLocaleString()} د.ع</li>`;
-                    });
-                    html += '</ol>';
-                    listDiv.innerHTML = html;
-                }
-            })
-            .catch(() => {
-                let history = JSON.parse(localStorage.getItem('firouz_orders') || '[]');
-                let customerTotals = {};
-                history.forEach(o => {
-                    if (!customerTotals[o.name]) customerTotals[o.name] = 0;
-                    customerTotals[o.name] += o.total;
-                });
-                let sorted = Object.entries(customerTotals).sort((a,b) => b[1] - a[1]);
-                if (sorted.length === 0) {
-                    listDiv.innerHTML = 'لا توجد بيانات مسجلة محلياً أو سحابياً.';
-                } else {
-                    let html = '<ol style="padding-right: 20px;">';
-                    sorted.slice(0, 5).forEach(([name, total]) => {
-                        html += `<li style="margin-bottom: 8px;"><b>${name}</b> - إجمالي المشتريات: ${total.toLocaleString()} د.ع</li>`;
-                    });
-                    html += '</ol>';
-                    listDiv.innerHTML = html;
-                }
-            });
+                let html = '<ol style="padding-right: 20px;">';
+                sorted.slice(0, 5).forEach(([name, total]) => { html += `<li><b>${name}</b>: ${Number(total).toLocaleString()} د.ع</li>`; });
+                listDiv.innerHTML = html + '</ol>';
+            }).catch(() => { listDiv.innerHTML = 'تعذر الاتصال بالسحابة.'; });
         }
 
         function handleHeaderClick() {
             headerClickCount++;
             if (headerClickCount === 7) {
                 headerClickCount = 0;
-                let pass = prompt('أدخل الرمز السري للوحة التحكم:');
-                if (pass === '2050') {
-                    openAdminPanel();
-                } else {
-                    alert('الرمز خطأ!');
-                }
+                let pass = prompt('الرمز السري للإدارة:');
+                if (pass === '2050') openAdminPanel();
             }
         }
 
@@ -961,113 +1014,46 @@
             let adminList = document.getElementById('adminItemsList');
             adminList.innerHTML = '';
             menuItems.forEach((item, index) => {
-                adminList.innerHTML += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #eee;">
-                        <span>${item.name}</span>
-                        <label><input type="checkbox" ${item.active ? 'checked' : ''} onchange="toggleItemStatus(${index})"> تفعيل</label>
-                    </div>
-                `;
+                adminList.innerHTML += `<div style="display:flex; justify-content:space-between; padding:5px 0;"><span>${item.name}</span><label><input type="checkbox" ${item.active?'checked':''} onchange="menuItems[${index}].active=!menuItems[${index}].active"> تفعيل</label></div>`;
             });
             document.getElementById('adminModal').style.display = 'flex';
         }
 
-        function toggleItemStatus(index) {
-            menuItems[index].active = !menuItems[index].active;
-            renderMenu();
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
 
         function buildOrderMessage(isMarkdown) {
-            if (!currentUser) {
-                alert('يرجى تسجيل الدخول أولاً قبل إرسال الطلب لتوثيق نقاطك وسجلك!');
-                openAuthModal();
-                return null;
-            }
+            if (!currentUser) { alert('يرجى تسجيل الدخول أولاً!'); openAuthModal(); return null; }
+            let address = document.getElementById('customerAddress').value.trim();
+            if (!address) { alert('يرجى كتابة العنوان أو رقم الطاولة!'); return null; }
 
-            const address = document.getElementById('customerAddress').value.trim();
-            const notes = document.getElementById('customerNotes').value.trim();
-
-            if (!address) {
-                alert('يرجى كتابة العنوان أو رقم الطاولة أولاً!');
-                return null;
-            }
-
-            let boldSymbol = isMarkdown ? `*` : ``;
-            let bulletSymbol = isMarkdown ? `▪️ ` : `- `;
-
-            let msg = `🔔 ${boldSymbol}طلب جديد - كافتريا فيروز${boldSymbol} 🔔\n\n`;
-            msg += `👤 ${boldSymbol}الزبون:${boldSymbol} ${currentUser.name}\n`;
-            msg += `📞 ${boldSymbol}الهاتف:${boldSymbol} ${currentUser.phone}\n`;
-            msg += `📍 ${boldSymbol}الموقع/الطاولة:${boldSymbol} ${address}\n`;
-            if(notes) msg += `📝 ${boldSymbol}ملاحظات:${boldSymbol} ${notes}\n`;
-            msg += `\n🛒 ${boldSymbol}الطلبات:${boldSymbol}\n`;
-
+            let bold = isMarkdown ? '*' : '';
+            let msg = `🔔 ${bold}طلب جديد - كافتريا فيروز${bold} 🔔\n\n👤 ${bold}الزبون:${bold} ${currentUser.name}\n📞 ${bold}الهاتف:${bold} ${currentUser.phone}\n📍 ${bold}العنوان:${bold} ${address}\n\n🛒 ${bold}الطلبات:${bold}\n`;
             let total = 0;
-            cart.forEach(item => {
-                msg += `${bulletSymbol}${item.name} × ${item.qty} (${(item.price * item.qty).toLocaleString()} د.ع)\n`;
-                total += item.price * item.qty;
-            });
-
+            cart.forEach(i => { msg += `- ${i.name} × ${i.qty} (${(i.price*i.qty).toLocaleString()} د.ع)\n`; total += i.price * i.qty; });
             recordOrderDataToCloud(total, address);
-            let earnedPoints = Math.floor(total / 1000) * 10;
-
-            msg += `\n💰 ${boldSymbol}المجموع الكلي:${boldSymbol} ${total.toLocaleString()} د.ع\n`;
-            msg += `⭐ ${boldSymbol}نقاط الولاء المكتسبة:${boldSymbol} ${earnedPoints} نقطة`;
+            msg += `\n💰 ${bold}المجموع:${bold} ${total.toLocaleString()} د.ع`;
             return msg;
         }
 
-        function clearCartAndInputs() {
-            cart = [];
-            updateCartUI();
-            document.getElementById('customerAddress').value = '';
-            document.getElementById('customerNotes').value = '';
-            checkUserSession();
-        }
-
         function sendOrderTelegram() {
-            if (cart.length === 0) { alert('سلة الطلبات فارغة!'); return; }
-            const message = buildOrderMessage(true);
-            if (!message) return;
-
-            const telegramToken = "8919061460:AAGaz2NHqg7HPDK-qyvxwLFqOccGS12gGWg"; 
-            const chatId = "-1004417100810"; 
-            const url = `https://api.telegram.org/bot${telegramToken}/sendMessage`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'Markdown' })
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('🔥 تم إرسال طلبك بنجاح للمطبخ وحفظه في السحابة!');
-                    clearCartAndInputs();
-                } else {
-                    alert('حدث خطأ بالارسال، جرب طريقة الواتساب.');
-                }
-            })
-            .catch(() => alert('فشل الاتصال بالإنترنت.'));
+            if (cart.length === 0) { alert('السلة فارغة!'); return; }
+            let msg = buildOrderMessage(true);
+            if (!msg) return;
+            fetch(`https://api.telegram.org/bot8919061460:AAGaz2NHqg7HPDK-qyvxwLFqOccGS12gGWg/sendMessage`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: "-1004417100810", text: msg, parse_mode: 'Markdown' })
+            }).then(() => { alert('تم الإرسال بنجاح للمطبخ!'); cart = []; updateCartUI(); document.getElementById('customerAddress').value = ''; });
         }
 
         function sendOrderWhatsApp() {
-            if (cart.length === 0) { alert('سلة الطلبات فارغة!'); return; }
-            const message = buildOrderMessage(false);
-            if (!message) return;
-
-            const whatsappNumber = "9647819871615"; 
-            const encodedText = encodeURIComponent(message);
-            window.open(`https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedText}`, '_blank');
-            clearCartAndInputs();
+            if (cart.length === 0) { alert('السلة فارغة!'); return; }
+            let msg = buildOrderMessage(false);
+            if (!msg) return;
+            window.open(`https://api.whatsapp.com/send?phone=9647819871615&text=${encodeURIComponent(msg)}`, '_blank');
+            cart = []; updateCartUI();
         }
 
-        window.onload = function() {
-            renderMenu();
-            checkUserSession();
-            startFaloulaWandering();
-        };
+        window.onload = () => { renderMenu(); checkUserSession(); };
     </script>
 </body>
 </html>
